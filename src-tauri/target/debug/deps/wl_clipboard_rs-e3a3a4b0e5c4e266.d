@@ -1,0 +1,11 @@
+/home/myo/CDiskCleaner/src-tauri/target/debug/deps/wl_clipboard_rs-e3a3a4b0e5c4e266.d: /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/lib.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/common.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/data_control.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/seat_data.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/copy.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/paste.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/utils.rs
+
+/home/myo/CDiskCleaner/src-tauri/target/debug/deps/libwl_clipboard_rs-e3a3a4b0e5c4e266.rmeta: /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/lib.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/common.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/data_control.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/seat_data.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/copy.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/paste.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/utils.rs
+
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/lib.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/common.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/data_control.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/seat_data.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/copy.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/paste.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wl-clipboard-rs-0.9.3/src/utils.rs:

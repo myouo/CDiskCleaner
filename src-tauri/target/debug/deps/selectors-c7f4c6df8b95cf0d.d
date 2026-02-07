@@ -1,0 +1,18 @@
+/home/myo/CDiskCleaner/src-tauri/target/debug/deps/selectors-c7f4c6df8b95cf0d.d: /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/lib.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/attr.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/bloom.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/builder.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/context.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/matching.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/nth_index_cache.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/parser.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/sink.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/tree.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/visitor.rs /home/myo/CDiskCleaner/src-tauri/target/debug/build/selectors-6efb76c84709d270/out/ascii_case_insensitive_html_attributes.rs
+
+/home/myo/CDiskCleaner/src-tauri/target/debug/deps/libselectors-c7f4c6df8b95cf0d.rmeta: /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/lib.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/attr.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/bloom.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/builder.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/context.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/matching.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/nth_index_cache.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/parser.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/sink.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/tree.rs /home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/visitor.rs /home/myo/CDiskCleaner/src-tauri/target/debug/build/selectors-6efb76c84709d270/out/ascii_case_insensitive_html_attributes.rs
+
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/lib.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/attr.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/bloom.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/builder.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/context.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/matching.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/nth_index_cache.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/parser.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/sink.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/tree.rs:
+/home/myo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/selectors-0.22.0/visitor.rs:
+/home/myo/CDiskCleaner/src-tauri/target/debug/build/selectors-6efb76c84709d270/out/ascii_case_insensitive_html_attributes.rs:
+
+# env-dep:OUT_DIR=/home/myo/CDiskCleaner/src-tauri/target/debug/build/selectors-6efb76c84709d270/out

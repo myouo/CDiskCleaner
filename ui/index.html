@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CDiskCleaner</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-orb orb-a"></div>
+    <div class="bg-orb orb-b"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">C</div>
+        <div>
+          <div class="title">CDiskCleaner</div>
+          <div class="subtitle">Rules-first cleanup with explicit risk controls</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost" id="scanBtn">Scan</button>
+        <button class="btn primary" id="cleanBtn">Clean Selected</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel stats">
+        <div class="stat">
+          <div class="stat-label">Estimated reclaim</div>
+          <div class="stat-value" id="estSize">0 GB</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Selected items</div>
+          <div class="stat-value" id="selectedCount">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Risk filter</div>
+          <div class="chip-row">
+            <button class="chip active" data-risk="all">All</button>
+            <button class="chip" data-risk="low">Low</button>
+            <button class="chip" data-risk="medium">Medium</button>
+            <button class="chip" data-risk="high">High</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel rules">
+        <div class="rules-head">
+          <div class="rules-title">Cleanup rules</div>
+          <div class="rules-meta" id="ruleCount">0 rules</div>
+        </div>
+        <div class="rules-list" id="rulesList"></div>
+      </section>
+
+      <section class="panel insights">
+        <div class="insight-title">Space map</div>
+        <div class="bar-chart" id="spaceChart">
+          <div class="bar" style="--w: 55%">Temp</div>
+          <div class="bar" style="--w: 35%">Caches</div>
+          <div class="bar" style="--w: 20%">Logs</div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
