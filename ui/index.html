@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,50 +15,50 @@
         <div class="logo">C</div>
         <div>
           <div class="title">CDiskCleaner</div>
-          <div class="subtitle">Rules-first cleanup with explicit risk controls</div>
+          <div class="subtitle">基于规则的清理，并提供明确的风险控制</div>
         </div>
       </div>
       <div class="actions">
-        <button class="btn ghost" id="scanBtn">Scan</button>
-        <button class="btn primary" id="cleanBtn">Clean Selected</button>
+        <button class="btn ghost" id="scanBtn">扫描</button>
+        <button class="btn primary" id="cleanBtn">清理所选</button>
       </div>
     </header>
 
     <main class="layout">
       <section class="panel stats">
         <div class="stat">
-          <div class="stat-label">Estimated reclaim</div>
+          <div class="stat-label">预计可释放</div>
           <div class="stat-value" id="estSize">0 GB</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Selected items</div>
+          <div class="stat-label">已选项目</div>
           <div class="stat-value" id="selectedCount">0</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Risk filter</div>
+          <div class="stat-label">风险筛选</div>
           <div class="chip-row">
-            <button class="chip active" data-risk="all">All</button>
-            <button class="chip" data-risk="low">Low</button>
-            <button class="chip" data-risk="medium">Medium</button>
-            <button class="chip" data-risk="high">High</button>
+            <button class="chip active" data-risk="all">全部</button>
+            <button class="chip" data-risk="low">低</button>
+            <button class="chip" data-risk="medium">中</button>
+            <button class="chip" data-risk="high">高</button>
           </div>
         </div>
       </section>
 
       <section class="panel rules">
         <div class="rules-head">
-          <div class="rules-title">Cleanup rules</div>
-          <div class="rules-meta" id="ruleCount">0 rules</div>
+          <div class="rules-title">清理规则</div>
+          <div class="rules-meta" id="ruleCount">0 条规则</div>
         </div>
         <div class="rules-list" id="rulesList"></div>
       </section>
 
       <section class="panel insights">
-        <div class="insight-title">Space map</div>
+        <div class="insight-title">空间分布</div>
         <div class="bar-chart" id="spaceChart">
-          <div class="bar" style="--w: 55%">Temp</div>
-          <div class="bar" style="--w: 35%">Caches</div>
-          <div class="bar" style="--w: 20%">Logs</div>
+          <div class="bar" style="--w: 55%">临时文件</div>
+          <div class="bar" style="--w: 35%">缓存</div>
+          <div class="bar" style="--w: 20%">日志</div>
         </div>
       </section>
     </main>
@@ -66,32 +66,32 @@
     <div class="modal hidden" id="analysisModal">
       <div class="modal-card">
         <button class="modal-close" id="analysisClose">✕</button>
-        <div class="modal-title">Cleanup analysis</div>
+        <div class="modal-title">清理分析</div>
         <div class="modal-summary">
           <div class="summary-stat">
-            <div class="stat-label">Total cleaned</div>
+            <div class="stat-label">总计已清理</div>
             <div class="stat-value" id="analysisTotal">0 GB</div>
           </div>
           <div class="summary-stat">
-            <div class="stat-label">Files cleaned</div>
+            <div class="stat-label">已清理文件</div>
             <div class="stat-value" id="analysisFiles">0</div>
           </div>
         </div>
         <div class="modal-grid">
           <div>
-            <div class="section-title">By category</div>
+            <div class="section-title">按类别</div>
             <div class="bucket-list" id="analysisByCategory"></div>
           </div>
           <div>
-            <div class="section-title">By drive</div>
+            <div class="section-title">按磁盘</div>
             <div class="bucket-list" id="analysisByDrive"></div>
           </div>
         </div>
-        <div class="section-title">Cleaned items</div>
+        <div class="section-title">已清理项目</div>
         <div class="bucket-list" id="analysisItems"></div>
         <label class="toggle">
           <input type="checkbox" id="analysisToggle" />
-          <span>Show this analysis after cleanup</span>
+          <span>清理后显示分析</span>
         </label>
       </div>
     </div>

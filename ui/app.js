@@ -62,7 +62,7 @@ function renderRules() {
     rulesList.appendChild(item);
   });
 
-  ruleCount.textContent = `${filtered.length} rules`;
+  ruleCount.textContent = `${filtered.length} 条规则`;
   updateSelectionCount();
 }
 
@@ -121,7 +121,7 @@ function formatBytes(bytes) {
 async function scanRules() {
   if (!invoke) return;
   scanBtn.disabled = true;
-  scanBtn.textContent = "Scanning...";
+  scanBtn.textContent = "扫描中...";
   try {
     const results = await invoke("scan_rules_cmd");
     scanResults = new Map(results.map((r) => [r.id, r]));
@@ -138,7 +138,7 @@ async function scanRules() {
     console.error(err);
   } finally {
     scanBtn.disabled = false;
-    scanBtn.textContent = "Scan";
+    scanBtn.textContent = "扫描";
     updateEstimatedSize();
   }
 }
@@ -189,13 +189,13 @@ async function cleanSelected() {
   if (
     hasHighRisk &&
     !confirm(
-      "High-risk items selected (registry/app residue included). Portable apps may be misdetected. Continue cleanup?"
+      "已选择高风险项目（含注册表/应用残留）。便携应用可能被误判，是否继续清理？"
     )
   ) {
     return;
   }
   cleanBtn.disabled = true;
-  cleanBtn.textContent = "Cleaning...";
+  cleanBtn.textContent = "清理中...";
   try {
     const report = await invoke("clean_rules_cmd", { selectedIds });
     if (showAnalysis) {
@@ -206,7 +206,7 @@ async function cleanSelected() {
     console.error(err);
   } finally {
     cleanBtn.disabled = false;
-    cleanBtn.textContent = "Clean Selected";
+    cleanBtn.textContent = "清理所选";
   }
 }
 
@@ -222,7 +222,7 @@ function renderAnalysis(report) {
 function renderBucketList(container, items) {
   container.innerHTML = "";
   if (!items.length) {
-    container.textContent = "No data";
+    container.textContent = "暂无数据";
     return;
   }
   items.forEach((item) => {
