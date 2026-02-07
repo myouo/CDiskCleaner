@@ -13,7 +13,7 @@ pub struct DbPaths {
 pub fn init_db(data_dir: &Path) -> rusqlite::Result<DbPaths> {
     fs::create_dir_all(data_dir).map_err(|e| rusqlite::Error::ToSqlConversionFailure(Box::new(e)))?;
     let db_path = data_dir.join("rules.db");
-    let mut conn = Connection::open(&db_path)?;
+    let conn = Connection::open(&db_path)?;
     conn.execute_batch(SCHEMA_SQL)?;
     ensure_default_settings(&conn)?;
 

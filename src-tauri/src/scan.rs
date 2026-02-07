@@ -126,7 +126,6 @@ fn scan_directory(
     let mut file_count: u64 = 0;
     for entry in WalkDir::new(base_path)
         .follow_links(false)
-        .read_metadata(true)
         .into_iter()
     {
         let entry = match entry {
