@@ -1,8 +1,13 @@
-const { invoke, window: tauriWindow } = window.__TAURI__ || {};
-const appWindow =
-  tauriWindow?.getCurrentWindow?.() ??
-  tauriWindow?.appWindow ??
+const tauriGlobal = window.__TAURI__ || {};
+const invoke =
+  tauriGlobal?.core?.invoke ??
+  tauriGlobal?.invoke ??
   null;
+const windowApi = tauriGlobal?.window ?? tauriGlobal?.appWindow ?? null;
+const appWindow =
+  typeof windowApi?.getCurrentWindow === "function"
+    ? windowApi.getCurrentWindow()
+    : windowApi?.appWindow ?? windowApi ?? null;
 
 const rulesList = document.getElementById("rulesList");
 const ruleCount = document.getElementById("ruleCount");
