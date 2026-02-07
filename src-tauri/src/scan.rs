@@ -1,5 +1,6 @@
 use std::env;
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::{Duration, SystemTime};
 
 use glob::Pattern;
@@ -7,18 +8,58 @@ use jwalk::WalkDir;
 
 use crate::models::{Rule, RuleScan};
 
+static SCAN_CANCELLED: AtomicBool = AtomicBool::new(false);
+
 pub struct ScanOptions {
     pub is_admin: bool,
 }
 
-pub fn scan_rules(rules: &[Rule], options: &ScanOptions) -> Vec<RuleScan> {
-    rules
-        .iter()
-        .map(|rule| scan_rule(rule, options))
-        .collect()
+pub fn clear_cancel() {
+    SCAN_CANCELLED.store(false, Ordering::SeqCst);
+}
+
+pub fn request_cancel() {
+    SCAN_CANCELLED.store(true, Ordering::SeqCst);
+}
+
+fn is_cancelled() -> bool {
+    SCAN_CANCELLED.load(Ordering::SeqCst)
+}
+
+fn cancelled_scan(rule: &Rule) -> RuleScan {
+    RuleScan {
+        id: rule.id.clone(),
+        total_bytes: 0,
+        file_count: 0,
+        status: "cancelled".to_string(),
+        blocked: false,
+        blocked_reason: None,
+    }
+}
+
+pub fn scan_rules<F>(rules: &[Rule], options: &ScanOptions, progress: &mut F) -> Vec<RuleScan>
+where
+    F: FnMut(&Rule),
+{
+    let mut results = Vec::with_capacity(rules.len());
+    for (idx, rule) in rules.iter().enumerate() {
+        if is_cancelled() {
+            results.push(cancelled_scan(rule));
+            for rest in rules.iter().skip(idx + 1) {
+                results.push(cancelled_scan(rest));
+            }
+            return results;
+        }
+        progress(rule);
+        results.push(scan_rule(rule, options));
+    }
+    results
 }
 
 fn scan_rule(rule: &Rule, options: &ScanOptions) -> RuleScan {
+    if is_cancelled() {
+        return cancelled_scan(rule);
+    }
     if rule.requires_admin && !options.is_admin {
         return RuleScan {
             id: rule.id.clone(),
@@ -57,6 +98,9 @@ fn scan_rule(rule: &Rule, options: &ScanOptions) -> RuleScan {
     if rule.rule_type == "app_residue" {
         let candidates = residue_candidates(rule.age_threshold_days);
         for dir in candidates {
+            if is_cancelled() {
+                return cancelled_scan(rule);
+            }
             let (bytes, files) = scan_directory(&dir, now, age_threshold, size_threshold, None);
             total_bytes += bytes;
             file_count += files;
@@ -128,6 +172,9 @@ fn scan_directory(
         .follow_links(false)
         .into_iter()
     {
+        if is_cancelled() {
+            break;
+        }
         let entry = match entry {
             Ok(entry) => entry,
             Err(_) => continue,

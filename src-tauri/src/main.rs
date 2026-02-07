@@ -9,7 +9,7 @@ mod scan;
 mod settings;
 
 use std::path::PathBuf;
-use tauri::{Manager, State};
+use tauri::{Emitter, Manager, State};
 
 struct AppState {
     db_path: PathBuf,
@@ -28,11 +28,22 @@ fn privilege_state_cmd() -> Result<bool, String> {
 }
 
 #[tauri::command]
-fn scan_rules_cmd(state: State<'_, AppState>) -> Result<Vec<models::RuleScan>, String> {
+fn scan_rules_cmd(app: tauri::AppHandle, state: State<'_, AppState>) -> Result<Vec<models::RuleScan>, String> {
     let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
     let rules = rules::list_rules(&conn).map_err(|e| e.to_string())?;
     let is_admin = privilege::is_admin();
-    Ok(scan::scan_rules(&rules, &scan::ScanOptions { is_admin }))
+    scan::clear_cancel();
+    let mut progress = |rule: &models::Rule| {
+        let _ = app.emit(
+            "scan:progress",
+            serde_json::json!({
+                "id": rule.id,
+                "title": rule.title,
+                "path": rule.path
+            }),
+        );
+    };
+    Ok(scan::scan_rules(&rules, &scan::ScanOptions { is_admin }, &mut progress))
 }
 
 #[tauri::command]
@@ -59,6 +70,12 @@ fn set_setting_cmd(state: State<'_, AppState>, key: String, value: String) -> Re
     settings::set_setting(&conn, &key, &value).map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn cancel_scan_cmd() -> Result<(), String> {
+    scan::request_cancel();
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -76,6 +93,7 @@ fn main() {
             list_rules_cmd,
             privilege_state_cmd,
             scan_rules_cmd,
+            cancel_scan_cmd,
             clean_rules_cmd,
             get_setting_cmd,
             set_setting_cmd

@@ -7,7 +7,10 @@ const windowApi = tauriGlobal?.window ?? tauriGlobal?.appWindow ?? null;
 const appWindow =
   typeof windowApi?.getCurrentWindow === "function"
     ? windowApi.getCurrentWindow()
-    : windowApi?.appWindow ?? windowApi ?? null;
+    : typeof windowApi?.getCurrent === "function"
+      ? windowApi.getCurrent()
+      : windowApi?.appWindow ?? tauriGlobal?.appWindow ?? windowApi ?? null;
+const eventApi = tauriGlobal?.event ?? tauriGlobal?.eventApi ?? null;
 
 const rulesList = document.getElementById("rulesList");
 const ruleCount = document.getElementById("ruleCount");
@@ -24,6 +27,7 @@ const analysisByCategory = document.getElementById("analysisByCategory");
 const analysisByDrive = document.getElementById("analysisByDrive");
 const analysisItems = document.getElementById("analysisItems");
 const analysisToggle = document.getElementById("analysisToggle");
+const scanStatus = document.getElementById("scanStatus");
 const titlebarMin = document.getElementById("titlebar-minimize");
 const titlebarMax = document.getElementById("titlebar-maximize");
 const titlebarClose = document.getElementById("titlebar-close");
@@ -32,6 +36,8 @@ let rules = [];
 let riskFilter = "all";
 let scanResults = new Map();
 let showAnalysis = true;
+let scanInProgress = false;
+let scanCancelRequested = false;
 
 const RULE_I18N = {
   sys_temp: { title: "系统临时文件", description: "Windows 系统临时目录", category: "临时文件" },
@@ -108,6 +114,27 @@ function getRuleDisplay(rule) {
     category: i18n?.category ?? CATEGORY_I18N[rule.category] ?? rule.category,
     riskLabel: RISK_LABELS[rule.risk] ?? rule.risk
   };
+}
+
+const STATUS_LABELS = {
+  blocked: "需要管理员",
+  missing: "不存在",
+  missing_path: "路径缺失",
+  unsupported: "不支持",
+  cancelled: "已取消"
+};
+
+if (eventApi?.listen && scanStatus) {
+  eventApi.listen("scan:progress", (event) => {
+    if (!scanInProgress) return;
+    const payload = event?.payload ?? event;
+    if (!payload) return;
+    const title = payload.title ?? payload.id ?? "";
+    const path = payload.path ?? "";
+    scanStatus.textContent = path
+      ? `正在扫描：${title} · ${path}`
+      : `正在扫描：${title}`;
+  });
 }
 
 async function toggleMaximize() {
@@ -234,10 +261,25 @@ function formatBytes(bytes) {
 
 async function scanRules() {
   if (!invoke) return;
-  scanBtn.disabled = true;
-  scanBtn.textContent = "扫描中...";
+  if (scanInProgress) {
+    scanCancelRequested = true;
+    scanBtn.textContent = "取消中...";
+    if (scanStatus) scanStatus.textContent = "正在取消扫描...";
+    try {
+      await invoke("cancel_scan_cmd");
+    } catch (err) {
+      console.error(err);
+    }
+    return;
+  }
+  scanInProgress = true;
+  scanCancelRequested = false;
+  scanBtn.textContent = "取消扫描";
+  cleanBtn.disabled = true;
+  if (scanStatus) scanStatus.textContent = "正在扫描...";
+  let results = [];
   try {
-    const results = await invoke("scan_rules_cmd");
+    results = await invoke("scan_rules_cmd");
     scanResults = new Map(results.map((r) => [r.id, r]));
     results.forEach((result) => {
       const item = rulesList.querySelector(`[data-rule-id='${result.id}']`);
@@ -245,15 +287,20 @@ async function scanRules() {
       const sizeEl = item.querySelector(".rule-size");
       if (!sizeEl) return;
       sizeEl.textContent =
-        result.status === "ok" ? formatBytes(result.total_bytes) : result.status;
+        result.status === "ok" ? formatBytes(result.total_bytes) : (STATUS_LABELS[result.status] ?? result.status);
     });
     updateSpaceChart();
   } catch (err) {
     console.error(err);
   } finally {
-    scanBtn.disabled = false;
+    scanInProgress = false;
     scanBtn.textContent = "扫描";
+    cleanBtn.disabled = false;
     updateEstimatedSize();
+    const wasCancelled = scanCancelRequested || results.some((r) => r.status === "cancelled");
+    if (scanStatus) {
+      scanStatus.textContent = wasCancelled ? "已取消扫描" : "扫描完成";
+    }
   }
 }
 

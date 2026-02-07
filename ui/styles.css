@@ -70,11 +70,13 @@ body {
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
+  -webkit-app-region: drag;
 }
 
 .titlebar-spacer {
   flex: 1;
   height: 44px;
+  -webkit-app-region: drag;
 }
 
 .window-controls {
@@ -85,6 +87,7 @@ body {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.7);
   box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
+  -webkit-app-region: no-drag;
 }
 
 .win-btn {
@@ -98,6 +101,7 @@ body {
   line-height: 1;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  -webkit-app-region: no-drag;
 }
 
 .win-btn:hover {
@@ -146,6 +150,7 @@ body {
 .actions {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .btn {
@@ -171,6 +176,11 @@ body {
 
 .btn:hover {
   transform: translateY(-2px);
+}
+
+.scan-status {
+  font-size: 12px;
+  color: var(--soft-ink);
 }
 
 .layout {
