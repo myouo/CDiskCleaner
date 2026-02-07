@@ -48,10 +48,61 @@ body {
 .topbar {
   position: relative;
   z-index: 2;
-  padding: 28px 40px;
+  padding: 18px 40px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.titlebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
+}
+
+.titlebar-drag {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.win-btn {
+  width: 34px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 22, 27, 0.1);
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.win-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(16, 22, 27, 0.12);
+}
+
+.win-btn.close {
+  background: #2a2f34;
+  color: #fff;
+}
+
+.win-btn.close:hover {
+  background: #111418;
 }
 
 .brand {

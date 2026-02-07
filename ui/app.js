@@ -1,4 +1,8 @@
-const { invoke } = window.__TAURI__ || {};
+const { invoke, window: tauriWindow } = window.__TAURI__ || {};
+const appWindow =
+  tauriWindow?.getCurrentWindow?.() ??
+  tauriWindow?.appWindow ??
+  null;
 
 const rulesList = document.getElementById("rulesList");
 const ruleCount = document.getElementById("ruleCount");
@@ -15,11 +19,38 @@ const analysisByCategory = document.getElementById("analysisByCategory");
 const analysisByDrive = document.getElementById("analysisByDrive");
 const analysisItems = document.getElementById("analysisItems");
 const analysisToggle = document.getElementById("analysisToggle");
+const titlebarMin = document.getElementById("titlebar-minimize");
+const titlebarMax = document.getElementById("titlebar-maximize");
+const titlebarClose = document.getElementById("titlebar-close");
 
 let rules = [];
 let riskFilter = "all";
 let scanResults = new Map();
 let showAnalysis = true;
+
+async function toggleMaximize() {
+  if (!appWindow) return;
+  if (typeof appWindow.isMaximized !== "function") {
+    if (typeof appWindow.maximize === "function") appWindow.maximize();
+    return;
+  }
+  const isMax = await appWindow.isMaximized();
+  if (isMax && typeof appWindow.unmaximize === "function") {
+    await appWindow.unmaximize();
+  } else if (typeof appWindow.maximize === "function") {
+    await appWindow.maximize();
+  }
+}
+
+if (titlebarMin && appWindow?.minimize) {
+  titlebarMin.addEventListener("click", () => appWindow.minimize());
+}
+if (titlebarMax) {
+  titlebarMax.addEventListener("click", toggleMaximize);
+}
+if (titlebarClose && appWindow?.close) {
+  titlebarClose.addEventListener("click", () => appWindow.close());
+}
 
 function renderRules() {
   const filtered = rules.filter((rule) => riskFilter === "all" || rule.risk === riskFilter);
