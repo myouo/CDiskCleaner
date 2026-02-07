@@ -9,7 +9,7 @@ mod scan;
 mod settings;
 
 use std::path::PathBuf;
-use tauri::State;
+use tauri::{Manager, State};
 
 struct AppState {
     db_path: PathBuf,
@@ -62,8 +62,10 @@ fn set_setting_cmd(state: State<'_, AppState>, key: String, value: String) -> Re
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let data_dir = tauri::api::path::app_data_dir(&app.config())
-                .ok_or_else(|| "Failed to resolve app data dir".to_string())?;
+            let data_dir = app
+                .path()
+                .app_data_dir()
+                .map_err(|e| e.to_string())?;
             let db_paths = db::init_db(&data_dir).map_err(|e| e.to_string())?;
             app.manage(AppState {
                 db_path: db_paths.db_path,

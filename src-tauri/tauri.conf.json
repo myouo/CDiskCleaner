@@ -1,18 +1,13 @@
 {
+  "productName": "CDiskCleaner",
+  "version": "0.1.0",
+  "identifier": "com.cdiskcleaner.app",
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "../ui",
-    "distDir": "../ui"
+    "frontendDist": "../ui"
   },
-  "package": {
-    "productName": "CDiskCleaner",
-    "version": "0.1.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": true
-    },
+  "app": {
     "windows": [
       {
         "title": "CDiskCleaner",

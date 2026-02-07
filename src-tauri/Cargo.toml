@@ -4,14 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [build-dependencies]
-tauri-build = { version = "1", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "1"
 rusqlite = { version = "0.31", features = ["bundled"] }
-tauri = { version = "1", features = ["api-all"] }
+tauri = { version = "2", features = [] }
 jwalk = "0.8"
 glob = "0.3"
 is_elevated = "0.1"
