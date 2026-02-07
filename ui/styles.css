@@ -54,28 +54,37 @@ body {
   gap: 14px;
 }
 
-.titlebar {
+.titlebar-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 16px;
-  padding: 8px 10px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
 }
 
 .titlebar-drag {
   display: flex;
   align-items: center;
   gap: 16px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
+}
+
+.titlebar-spacer {
+  flex: 1;
+  height: 44px;
 }
 
 .window-controls {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 6px 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 10px 24px rgba(16, 22, 27, 0.08);
 }
 
 .win-btn {
