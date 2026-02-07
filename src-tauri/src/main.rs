@@ -1,9 +1,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod db;
+mod cleanup;
 mod models;
+mod privilege;
 mod rules;
 mod scan;
+mod settings;
 
 use std::path::PathBuf;
 use tauri::State;
@@ -13,9 +16,47 @@ struct AppState {
 }
 
 #[tauri::command]
-fn list_rules_cmd(state: State<'_, AppState>) -> Result<Vec<models::Rule>, String> {
+fn list_rules_cmd(state: State<'_, AppState>) -> Result<Vec<models::RuleView>, String> {
     let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
-    rules::list_rules(&conn).map_err(|e| e.to_string())
+    let is_admin = privilege::is_admin();
+    rules::list_rules_with_privilege(&conn, is_admin).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn privilege_state_cmd() -> Result<bool, String> {
+    Ok(privilege::is_admin())
+}
+
+#[tauri::command]
+fn scan_rules_cmd(state: State<'_, AppState>) -> Result<Vec<models::RuleScan>, String> {
+    let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
+    let rules = rules::list_rules(&conn).map_err(|e| e.to_string())?;
+    let is_admin = privilege::is_admin();
+    Ok(scan::scan_rules(&rules, &scan::ScanOptions { is_admin }))
+}
+
+#[tauri::command]
+fn clean_rules_cmd(state: State<'_, AppState>, selected_ids: Vec<String>) -> Result<models::CleanupReport, String> {
+    let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
+    let rules = rules::list_rules(&conn).map_err(|e| e.to_string())?;
+    let is_admin = privilege::is_admin();
+    Ok(cleanup::cleanup_rules(
+        &rules,
+        &selected_ids,
+        &cleanup::CleanupOptions { is_admin },
+    ))
+}
+
+#[tauri::command]
+fn get_setting_cmd(state: State<'_, AppState>, key: String) -> Result<Option<String>, String> {
+    let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
+    settings::get_setting(&conn, &key).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn set_setting_cmd(state: State<'_, AppState>, key: String, value: String) -> Result<(), String> {
+    let conn = db::open_db(&state.db_path).map_err(|e| e.to_string())?;
+    settings::set_setting(&conn, &key, &value).map_err(|e| e.to_string())
 }
 
 fn main() {
@@ -29,7 +70,14 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![list_rules_cmd])
+        .invoke_handler(tauri::generate_handler![
+            list_rules_cmd,
+            privilege_state_cmd,
+            scan_rules_cmd,
+            clean_rules_cmd,
+            get_setting_cmd,
+            set_setting_cmd
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

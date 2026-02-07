@@ -63,6 +63,39 @@
       </section>
     </main>
 
+    <div class="modal hidden" id="analysisModal">
+      <div class="modal-card">
+        <button class="modal-close" id="analysisClose">✕</button>
+        <div class="modal-title">Cleanup analysis</div>
+        <div class="modal-summary">
+          <div class="summary-stat">
+            <div class="stat-label">Total cleaned</div>
+            <div class="stat-value" id="analysisTotal">0 GB</div>
+          </div>
+          <div class="summary-stat">
+            <div class="stat-label">Files cleaned</div>
+            <div class="stat-value" id="analysisFiles">0</div>
+          </div>
+        </div>
+        <div class="modal-grid">
+          <div>
+            <div class="section-title">By category</div>
+            <div class="bucket-list" id="analysisByCategory"></div>
+          </div>
+          <div>
+            <div class="section-title">By drive</div>
+            <div class="bucket-list" id="analysisByDrive"></div>
+          </div>
+        </div>
+        <div class="section-title">Cleaned items</div>
+        <div class="bucket-list" id="analysisItems"></div>
+        <label class="toggle">
+          <input type="checkbox" id="analysisToggle" />
+          <span>Show this analysis after cleanup</span>
+        </label>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>

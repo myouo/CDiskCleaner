@@ -12,6 +12,14 @@ serde_json = "1"
 thiserror = "1"
 rusqlite = { version = "0.31", features = ["bundled"] }
 tauri = { version = "1", features = ["api-all"] }
+jwalk = "0.8"
+glob = "0.3"
+is_elevated = "0.1"
+trash = "3"
+winreg = { version = "0.52", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+winreg = "0.52"
 
 [features]
 custom-protocol = ["tauri/custom-protocol"]

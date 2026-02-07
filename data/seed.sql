@@ -2,7 +2,7 @@ BEGIN TRANSACTION;
 
 INSERT OR REPLACE INTO meta (key, value) VALUES
   ('schema_version','1'),
-  ('seed_version','1');
+  ('seed_version','2');
 
 -- Low risk: temp and caches
 INSERT OR REPLACE INTO rules (id, title, description, category, risk, default_checked, requires_admin, rule_type, scope, path, pattern, size_threshold_mb, age_threshold_days, action, tool_cmd, enabled, sort_order, notes) VALUES
@@ -18,16 +18,16 @@ INSERT OR REPLACE INTO rules (id, title, description, category, risk, default_ch
   ('prefetch','Prefetch files','Prefetch cache for app launches','cache','low',0,1,'path','system','%WINDIR%\\Prefetch',NULL,NULL,30,'delete',NULL,1,100,'Keep recent files'),
   ('recycle_bin','Recycle Bin','Clear Recycle Bin contents','temp','low',0,0,'special','both',NULL,NULL,NULL,NULL,'tool_call','shell:recycle_bin_empty',1,110,NULL);
 
--- Browsers (low risk by default)
+-- Browsers (low risk by default, profile-aware)
 INSERT OR REPLACE INTO rules VALUES
-  ('chrome_cache','Chrome cache','Google Chrome cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Cache',NULL,NULL,NULL,'delete',NULL,1,120,NULL),
-  ('chrome_code_cache','Chrome code cache','Chrome code cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Code Cache',NULL,NULL,NULL,'delete',NULL,1,121,NULL),
-  ('chrome_gpu_cache','Chrome GPU cache','Chrome GPU cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\GPUCache',NULL,NULL,NULL,'delete',NULL,1,122,NULL),
-  ('edge_cache','Edge cache','Microsoft Edge cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Cache',NULL,NULL,NULL,'delete',NULL,1,130,NULL),
-  ('edge_code_cache','Edge code cache','Edge code cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Code Cache',NULL,NULL,NULL,'delete',NULL,1,131,NULL),
-  ('edge_gpu_cache','Edge GPU cache','Edge GPU cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\GPUCache',NULL,NULL,NULL,'delete',NULL,1,132,NULL),
-  ('brave_cache','Brave cache','Brave cache folders','browser','low',1,0,'path','user','%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data\\Default\\Cache',NULL,NULL,NULL,'delete',NULL,1,140,NULL),
-  ('firefox_cache','Firefox cache','Firefox cache2 folders','browser','low',1,0,'pattern','user','%APPDATA%\\Mozilla\\Firefox\\Profiles','*\\cache2',NULL,NULL,'delete',NULL,1,150,NULL);
+  ('chrome_cache','Chrome cache','Google Chrome cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data','*\\Cache\\**',NULL,NULL,'delete',NULL,1,120,NULL),
+  ('chrome_code_cache','Chrome code cache','Chrome code cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data','*\\Code Cache\\**',NULL,NULL,'delete',NULL,1,121,NULL),
+  ('chrome_gpu_cache','Chrome GPU cache','Chrome GPU cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Google\\Chrome\\User Data','*\\GPUCache\\**',NULL,NULL,'delete',NULL,1,122,NULL),
+  ('edge_cache','Edge cache','Microsoft Edge cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data','*\\Cache\\**',NULL,NULL,'delete',NULL,1,130,NULL),
+  ('edge_code_cache','Edge code cache','Edge code cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data','*\\Code Cache\\**',NULL,NULL,'delete',NULL,1,131,NULL),
+  ('edge_gpu_cache','Edge GPU cache','Edge GPU cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\Microsoft\\Edge\\User Data','*\\GPUCache\\**',NULL,NULL,'delete',NULL,1,132,NULL),
+  ('brave_cache','Brave cache','Brave cache folders (all profiles)','browser','low',1,0,'pattern','user','%LOCALAPPDATA%\\BraveSoftware\\Brave-Browser\\User Data','*\\Cache\\**',NULL,NULL,'delete',NULL,1,140,NULL),
+  ('firefox_cache','Firefox cache','Firefox cache2 folders','browser','low',1,0,'pattern','user','%APPDATA%\\Mozilla\\Firefox\\Profiles','*\\cache2\\**',NULL,NULL,'delete',NULL,1,150,NULL);
 
 -- Medium risk: system caches and update caches
 INSERT OR REPLACE INTO rules VALUES
@@ -62,6 +62,6 @@ INSERT OR REPLACE INTO rules VALUES
   ('winsxs_cleanup','WinSxS cleanup (不建议删除该内容，除非您已知删除该内容的风险)','Clean component store via DISM','system','high',0,1,'special','system',NULL,NULL,NULL,NULL,'tool_call','DISM /Online /Cleanup-Image /StartComponentCleanup',1,500,'Use DISM only'),
   ('restore_points','System Restore Points (不建议删除该内容，除非您已知删除该内容的风险)','Delete restore points','system','high',0,1,'special','system',NULL,NULL,NULL,NULL,'tool_call','vssadmin Delete Shadows /All /Quiet',1,510,'Requires admin'),
   ('registry_orphans','Registry orphans (不建议删除该内容，除非您已知删除该内容的风险)','Detect orphan uninstall entries and invalid paths','registry','high',0,1,'registry','system',NULL,NULL,NULL,NULL,'delete',NULL,1,520,'Backup required'),
-  ('app_residue','Uninstalled app residue (不建议删除该内容，除非您已知删除该内容的风险)','Detect leftover files from uninstalled apps','apps','high',0,0,'app_residue','both',NULL,NULL,NULL,NULL,'delete',NULL,1,530,'Match by uninstall records');
+  ('app_residue','Uninstalled app residue (不建议删除该内容，除非您已知删除该内容的风险)','Detect leftover files from uninstalled apps','apps','high',0,0,'app_residue','both',NULL,NULL,NULL,180,'delete',NULL,1,530,'Match by uninstall records, only old folders');
 
 COMMIT;

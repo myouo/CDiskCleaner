@@ -1,6 +1,6 @@
 use rusqlite::Connection;
 
-use crate::models::Rule;
+use crate::models::{Rule, RuleView};
 
 pub fn list_rules(conn: &Connection) -> rusqlite::Result<Vec<Rule>> {
     let mut stmt = conn.prepare(
@@ -40,4 +40,42 @@ pub fn list_rules(conn: &Connection) -> rusqlite::Result<Vec<Rule>> {
         out.push(item?);
     }
     Ok(out)
+}
+
+pub fn list_rules_with_privilege(conn: &Connection, is_admin: bool) -> rusqlite::Result<Vec<RuleView>> {
+    let rules = list_rules(conn)?;
+    let views = rules
+        .into_iter()
+        .map(|rule| {
+            let blocked = rule.requires_admin && !is_admin;
+            let blocked_reason = if blocked {
+                Some("Requires administrator privileges".to_string())
+            } else {
+                None
+            };
+            RuleView {
+                id: rule.id,
+                title: rule.title,
+                description: rule.description,
+                category: rule.category,
+                risk: rule.risk,
+                default_checked: rule.default_checked,
+                requires_admin: rule.requires_admin,
+                rule_type: rule.rule_type,
+                scope: rule.scope,
+                path: rule.path,
+                pattern: rule.pattern,
+                size_threshold_mb: rule.size_threshold_mb,
+                age_threshold_days: rule.age_threshold_days,
+                action: rule.action,
+                tool_cmd: rule.tool_cmd,
+                enabled: rule.enabled,
+                sort_order: rule.sort_order,
+                notes: rule.notes,
+                blocked,
+                blocked_reason,
+            }
+        })
+        .collect();
+    Ok(views)
 }

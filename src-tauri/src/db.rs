@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 const SCHEMA_SQL: &str = include_str!("../../data/schema.sql");
 const SEED_SQL: &str = include_str!("../../data/seed.sql");
+const SEED_VERSION: &str = "2";
 
 pub struct DbPaths {
     pub db_path: PathBuf,
@@ -14,6 +15,7 @@ pub fn init_db(data_dir: &Path) -> rusqlite::Result<DbPaths> {
     let db_path = data_dir.join("rules.db");
     let mut conn = Connection::open(&db_path)?;
     conn.execute_batch(SCHEMA_SQL)?;
+    ensure_default_settings(&conn)?;
 
     let seed_version: Option<String> = conn
         .query_row(
@@ -23,7 +25,7 @@ pub fn init_db(data_dir: &Path) -> rusqlite::Result<DbPaths> {
         )
         .optional()?;
 
-    if seed_version.is_none() {
+    if seed_version.as_deref() != Some(SEED_VERSION) {
         conn.execute_batch(SEED_SQL)?;
     }
 
@@ -32,4 +34,12 @@ pub fn init_db(data_dir: &Path) -> rusqlite::Result<DbPaths> {
 
 pub fn open_db(db_path: &Path) -> rusqlite::Result<Connection> {
     Connection::open(db_path)
+}
+
+fn ensure_default_settings(conn: &Connection) -> rusqlite::Result<()> {
+    conn.execute(
+        "INSERT OR IGNORE INTO settings (key, value) VALUES ('show_analysis','1')",
+        [],
+    )?;
+    Ok(())
 }
