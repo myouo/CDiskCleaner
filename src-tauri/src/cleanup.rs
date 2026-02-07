@@ -155,8 +155,9 @@ fn cleanup_path_rule(rule: &Rule) -> CleanupItemReport {
             if !entry.file_type().is_file() {
                 continue;
             }
+            let path = entry.path();
             process_path(
-                entry.path(),
+                &path,
                 &base_path,
                 &matcher,
                 now,
