@@ -143,7 +143,6 @@ fn cleanup_path_rule(rule: &Rule) -> CleanupItemReport {
     } else {
         for entry in WalkDir::new(&base_path)
             .follow_links(false)
-            .read_metadata(true)
             .into_iter()
         {
             let entry = match entry {
@@ -234,34 +233,34 @@ fn process_path(
     file_count: &mut u64,
     had_error: &mut bool,
 ) {
-        if let Some(matcher) = &matcher {
-            if let Some(rel) = path.strip_prefix(&base_path).ok() {
-                let rel_norm = normalize_path(rel);
-                if !matcher.matches(&rel_norm) {
-                    continue;
-                }
-            }
-        }
-        let meta = match path.metadata() {
-            Ok(meta) => meta,
-            Err(_) => {
-                *had_error = true;
+    if let Some(matcher) = &matcher {
+        if let Some(rel) = path.strip_prefix(&base_path).ok() {
+            let rel_norm = normalize_path(rel);
+            if !matcher.matches(&rel_norm) {
                 return;
             }
-        };
-        if !should_count(&meta, now, age_threshold, size_threshold) {
+        }
+    }
+    let meta = match path.metadata() {
+        Ok(meta) => meta,
+        Err(_) => {
+            *had_error = true;
             return;
         }
-        *total_bytes += meta.len();
-        *file_count += 1;
+    };
+    if !should_count(&meta, now, age_threshold, size_threshold) {
+        return;
+    }
+    *total_bytes += meta.len();
+    *file_count += 1;
 
-        if action == "recycle" {
-            if let Err(_) = trash::delete(&path) {
-                *had_error = true;
-            }
-        } else if let Err(_) = std::fs::remove_file(&path) {
+    if action == "recycle" {
+        if let Err(_) = trash::delete(&path) {
             *had_error = true;
         }
+    } else if let Err(_) = std::fs::remove_file(&path) {
+        *had_error = true;
+    }
 }
 
 fn should_count(
@@ -447,7 +446,7 @@ fn registry_orphans() -> Vec<String> {
 
 #[cfg(target_os = "windows")]
 fn delete_registry_key(subkey: &str) -> Result<(), String> {
-    use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE, KEY_WRITE};
+    use winreg::enums::{HKEY_CURRENT_USER, HKEY_LOCAL_MACHINE};
     use winreg::RegKey;
 
     let (hkey, path) = if subkey.starts_with("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall")
@@ -554,7 +553,6 @@ fn scan_directory(
     let mut file_count: u64 = 0;
     for entry in WalkDir::new(base_path)
         .follow_links(false)
-        .read_metadata(true)
         .into_iter()
     {
         let entry = match entry {
